@@ -128,7 +128,7 @@ class BaseSolution:
         )
 
         if self.track_data and self.track_data.id is not None:
-            self.boxes = self.track_data.xyxyxyxy if self.is_obb else self.track_data.xyxy.cpu()
+            self.boxes = self.track_data.xyxyxyxy.reshape(-1, 4, 2).squeeze() if self.is_obb else self.track_data.xyxy.cpu()
             self.clss = self.track_data.cls.cpu().tolist()
             self.track_ids = self.track_data.id.int().cpu().tolist()
         else:

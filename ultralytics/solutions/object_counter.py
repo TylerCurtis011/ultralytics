@@ -180,7 +180,7 @@ class ObjectCounter(BaseSolution):
         # Iterate over bounding boxes, track ids and classes index
         for box, track_id, cls in zip(self.boxes, self.track_ids, self.clss):
             # Draw bounding box and counting region
-            self.annotator.box_label(box, label=self.names[cls], color=colors(cls, True))
+            self.annotator.box_label(box, label=self.names[cls], color=colors(cls, True), rotated=self.is_obb)
             self.store_tracking_history(track_id, box)  # Store track history
             self.store_classwise_counts(cls)  # Store classwise counts in dict
 

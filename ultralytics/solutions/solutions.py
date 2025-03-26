@@ -69,6 +69,7 @@ class BaseSolution:
         self.track_line = None
         self.masks = None
         self.r_s = None
+        self.is_obb = False
 
         self.LOGGER = LOGGER  # Store logger object to be used in multiple solution classes
 
@@ -118,8 +119,9 @@ class BaseSolution:
             >>> frame = cv2.imread("path/to/image.jpg")
             >>> solution.extract_tracks(frame)
         """
-        self.tracks = self.model.track(source=im0, persist=True, classes=self.classes, **self.track_add_args)
-        self.track_data = self.tracks[0].obb or self.tracks[0].boxes  # Extract tracks for OBB or object detection
+        self.tracks = self.model.track(source=im0, persist=True, classes=self.classes, **self.track_add_args)[0]
+        self.is_obb = bool(self.tracks.obb)
+        self.track_data = self.tracks.obb if self.is_obb else self.tracks.boxes
 
         self.masks = (
             self.tracks[0].masks.xy if hasattr(self.tracks[0], "masks") and self.tracks[0].masks is not None else None
